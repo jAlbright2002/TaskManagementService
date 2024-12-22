@@ -34,11 +34,17 @@ public class TaskService {
 
     public ResponseEntity<String> createTask(Task task) {
         Notification notification = new Notification();
-        notification.setActionType("CREATE_TASK");
-        notification.setEmail(task.getEmail());
-        rabbitTemplate.convertAndSend("createTaskSendNotificationQueue", notification);
-        taskDB.save(task);
-        return ResponseEntity.ok("Task created: " + task.getTitle());
+        try {
+            notification.setActionType("CREATE_TASK");
+            notification.setEmail(task.getEmail());
+            rabbitTemplate.convertAndSend("createTaskSendNotificationQueue", notification);
+            taskDB.save(task);
+            return ResponseEntity.ok("Task created: " + task.getTitle());
+        } catch (Exception e) {
+            System.err.println("Error sending notification: " + e.getMessage());
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(500).body("Error creating task");
+        }
     }
 
     public ResponseEntity<String> updateTask(String id, String email, Task task) {
