@@ -40,7 +40,7 @@ class TaskServiceTest {
     void testGetAllTasksForUserSuccess() {
         String email = "test@atu.ie";
         String jwt = "valid-jwt";
-        Task task = new Task("1", "Task 1", "Description", "test@atu.ie", "Pending");
+        Task task = new Task("1", "Task 1", "To Do", "Information", email);
         when(taskDB.findAllByEmail(email)).thenReturn(Optional.of(List.of(task)));
         when(jwtStore.getJwt()).thenReturn("valid-jwt");
 
@@ -66,7 +66,7 @@ class TaskServiceTest {
 
     @Test
     void testCreateTaskSuccess() {
-        Task task = new Task("1", "New Task", "Description", "test@atu.ie", "Pending");
+        Task task = new Task("1", "New Task", "To Do", "Information", "test@atu.ie");
         String jwt = "valid-jwt";
         when(jwtStore.getJwt()).thenReturn("valid-jwt");
 
@@ -79,7 +79,7 @@ class TaskServiceTest {
 
     @Test
     void testCreateTaskInvalidJwt() {
-        Task task = new Task("1", "New Task", "Description", "test@atu.ie", "Pending");
+        Task task = new Task("1", "New Task", "To Do", "Information", "test@atu.ie");
         String jwt = "invalid-jwt";
         when(jwtStore.getJwt()).thenReturn("valid-jwt");
 
@@ -93,8 +93,8 @@ class TaskServiceTest {
     void testUpdateTaskSuccess() {
         String id = "1";
         String email = "test@atu.ie";
-        Task oldTask = new Task(id, "Old Task", "Description", email, "Pending");
-        Task updatedTask = new Task(id, "Updated Task", "Updated Description", email, "Completed");
+        Task oldTask = new Task(id, "Old Task", "To Do", "Information", email);
+        Task updatedTask = new Task(id, "Updated Task", "In Progress", "More Information", email);
         String jwt = "valid-jwt";
 
         when(taskDB.findById(id)).thenReturn(Optional.of(oldTask));
@@ -112,7 +112,7 @@ class TaskServiceTest {
     void testDeleteTaskSuccess() {
         String id = "1";
         String email = "test@atu.ie";
-        Task task = new Task(id, "Task to Delete", "Description", email, "Pending");
+        Task task = new Task(id, "Task to Delete", "In Progress", "Information", email);
         String jwt = "valid-jwt";
 
         when(taskDB.findById(id)).thenReturn(Optional.of(task));
