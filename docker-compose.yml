@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  task-mgnt-noti:
+    image: br0kestudent/task_mgnt_noti:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/notifdb
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+
+  task-mgnt-reg:
+    image: br0kestudent/task_mgnt_reg:latest
+    ports:
+      - "8081:8081"
+    networks:
+      - my_network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/userdb
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+
+  task-mgnt-service:
+    image: br0kestudent/task_mgnt_service:latest
+    ports:
+      - "8082:8082"
+    networks:
+      - my_network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/tasksdb
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
+    volumes:
+      - mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my_network
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  mongo-data:
