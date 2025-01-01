@@ -28,12 +28,14 @@ The project will now be running and you can access its endpoints ->
 
 Each request needs a token to authenticate the action. This can be retrieved after login in the [Task Registration Service](https://github.com/jAlbright2002/TaskManagementRegistration.git), it is in the body of the response, which will look like this
 
-		Welcome user
-        Token: this-is-a-token
+	Welcome user
+	Token: this-is-a-token
 
-Copy this token and assign it to a new header in the requests called "Authorization".
+Copy this token
 
-/placeholder for image/
+Click add header in the requests and assign it to a new header called "Authorization"
+
+![Screenshot 2025-01-01 210053](https://github.com/user-attachments/assets/d9b96f80-9cc5-4ca6-81a5-8443a7434f6c)
 
 GET
 [Get all tasks](http://localhost:8082/allTasks/email)
